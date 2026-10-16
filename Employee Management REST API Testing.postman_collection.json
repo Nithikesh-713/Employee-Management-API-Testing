@@ -1,0 +1,208 @@
+{
+  "info": {
+    "_postman_id": "6e88f666-e0a6-420b-b808-9c525d13b763",
+    "name": "Employee Management REST API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58949904",
+    "_collection_link": "https://go.postman.co/collection/58949904-6e88f666-e0a6-420b-b808-9c525d13b763?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TC01 - Get all employees",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\",function(){\r\n    pm.response.to.have.status(200);\r\n});\r\npm.test(\"Response is a JSON array\",function(){\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.be.an(\"array\");\r\n});\r\npm.test(\"Employee-like records have rrqynu\")\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://gorest.in/public/v2/users",
+          "protocol": "https",
+          "host": [
+            "gorest",
+            "in"
+          ],
+          "path": [
+            "public",
+            "v2",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC02 - Create an employee like record",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\r\npm.test(\"Status code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Response contains an employee ID\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.id).to.exist;\r\n});\r\n\r\npm.test(\"Employee name matches request\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.name).to.eql(\"Test Employee\");\r\n});\r\n\r\npm.test(\"Employee email is present\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.email).to.include(\"@example.com\");\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "7e8e93a3cf3a7493f7c4b2e71debf5d66722bd24cd86bb9e367d65b75c6f9a0a",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"name\": \"Test Employee\",\r\n  \"email\": \"employee.{{$timestamp}}@example.com\",\r\n  \"gender\": \"male\",\r\n  \"status\": \"active\"\r\n}\r\n\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://gorest.in/public/v2/users",
+          "protocol": "https",
+          "host": [
+            "gorest",
+            "in"
+          ],
+          "path": [
+            "public",
+            "v2",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC03 - Update an employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Employee name is updated\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.name).to.eql(\"Updated Test Employee\");\r\n});\r\n\r\npm.test(\"Employee email is updated\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.email).to.include(\"updated.\");\r\n});\r\n\r\npm.test(\"Employee ID is present\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.id).to.exist;\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "7e8e93a3cf3a7493f7c4b2e71debf5d66722bd24cd86bb9e367d65b75c6f9a0a",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"name\": \"Updated Test Employee\",\r\n  \"email\": \"updated.{{$timestamp}}@example.com\",\r\n  \"gender\": \"male\",\r\n  \"status\": \"active\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://gorest.in/public/v2/users/1023",
+          "protocol": "https",
+          "host": [
+            "gorest",
+            "in"
+          ],
+          "path": [
+            "public",
+            "v2",
+            "users",
+            "1023"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC04 - Delete an employee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\r\npm.test(\"Status code is 204 No Content\", function () {\r\n    pm.response.to.have.status(204);\r\n});\r\n\r\npm.test(\"Delete response has no body\", function () {\r\n    pm.expect(pm.response.text()).to.eql(\"\");\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "7e8e93a3cf3a7493f7c4b2e71debf5d66722bd24cd86bb9e367d65b75c6f9a0a",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://gorest.in/public/v2/users/1023",
+          "protocol": "https",
+          "host": [
+            "gorest",
+            "in"
+          ],
+          "path": [
+            "public",
+            "v2",
+            "users",
+            "1023"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC05 - Test an invalid employee ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}
